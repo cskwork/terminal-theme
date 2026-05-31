@@ -1,0 +1,26 @@
+{
+  "mode": "LEGACY",
+  "current_phase": "build",
+  "cycles": {
+    "intake": 1,
+    "validate": 0,
+    "plan": 1,
+    "human_feedback": 1,
+    "build": 0,
+    "verify": 0,
+    "qa": 0,
+    "deliver": 0,
+    "reproduce": 0,
+    "diagnose": 0,
+    "fix": 0,
+    "explore": 1
+  },
+  "error_signatures": {},
+  "go_decision": "GO",
+  "plan_hash": "ca62c85f6242364abfdaad4c6812bee9168b2b816191d978fd4210e46097497e",
+  "approval": {
+    "phase": "Build",
+    "status": "APPROVED"
+  },
+  "circuit_breaker_threshold": 3
+}

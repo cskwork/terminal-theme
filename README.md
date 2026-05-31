@@ -1,89 +1,135 @@
-# iterm2-wezterm-port
+# terminal-theme
 
-Port WezTerm aesthetics to iTerm2 in one command. Catppuccin Mocha palette,
-JetBrains Mono Nerd Font, optional darkened background image, blinking-block
-cursor, generous line spacing — all installed as an iTerm2 **Dynamic Profile**
-so it loads without a restart and never clobbers your existing setup.
+Generate one Oh My Pi Titanium terminal theme for iTerm2, WezTerm, Windows
+Terminal, and PowerShell-adjacent shell styling.
 
-## What it ports from WezTerm
+The project keeps the iTerm2 Dynamic Profile installer, then adds portable
+theme fragments for terminal apps that use different config formats.
 
-| WezTerm setting                          | iTerm2 equivalent applied         |
-| ---------------------------------------- | --------------------------------- |
-| `color_scheme = 'Catppuccin Mocha'`      | Full 16-color ANSI + bg/fg/cursor |
-| `font = JetBrainsMono Nerd Font Medium`  | `JetBrainsMonoNFM-Medium 15`      |
-| `default_cursor_style = BlinkingBlock`   | Box cursor, blinking on           |
-| `backdrops/*` random rotation            | Single static image (configurable)|
-| `cursor_blink_rate = 650`                | iTerm2 default blink              |
-| Window padding (top 10, bottom 7.5)      | Vertical Spacing 1.05             |
+## Targets
 
-What does **not** port (iTerm2 doesn't support it natively):
-- Random backdrop rotation per launch — iTerm2 takes one static image.
-- `LEADER+b/Shift+B` runtime backdrop cycling.
-- Fancy semi-transparent tab bar.
-- WebGPU 120fps rendering and freetype tuning.
+| Target | Output |
+| --- | --- |
+| iTerm2 | Dynamic Profile JSON |
+| WezTerm | `wezterm.lua` color scheme |
+| Windows Terminal | settings fragment with a `schemes` entry |
+| PowerShell | profile snippet for `$PSStyle` and `$Host.PrivateData` |
 
-## Install
+PowerShell does not own the terminal ANSI palette. Use the iTerm2, WezTerm, or
+Windows Terminal target for full foreground, background, cursor, selection, and
+16-color ANSI palette support.
+
+## Install iTerm2
 
 Requirements: macOS, iTerm2, Python 3, JetBrains Mono Nerd Font Mono
 (`brew install --cask font-jetbrains-mono-nerd-font`).
 
 ```bash
-git clone https://github.com/cskwork/iterm2-wezterm-port
-cd iterm2-wezterm-port
+git clone https://github.com/cskwork/terminal-theme
+cd terminal-theme
 
-# Solid Catppuccin Mocha background, set as default profile
-python3 make-profile.py --set-default
-
-# Or with a darkened background image
-python3 make-profile.py --backdrop ~/Pictures/dark-bg.jpg --set-default
+python3 terminal-theme.py --set-default
 ```
 
-Open a new iTerm2 window (`⌘N`). The profile is loaded automatically — no
-restart required because Dynamic Profiles live outside the main plist.
+Open a new iTerm2 window. The profile is loaded automatically because Dynamic
+Profiles live outside the main plist.
+
+## Generate All Targets
+
+```bash
+python3 terminal-theme.py --target all --output-dir dist
+```
+
+This writes:
+
+```text
+dist/iterm2-dynamic-profile.json
+dist/wezterm.lua
+dist/windows-terminal.json
+dist/Microsoft.PowerShell_profile.ps1
+```
+
+## Generate One Target
+
+```bash
+python3 terminal-theme.py --target wezterm --output wezterm.lua
+python3 terminal-theme.py --target windows-terminal --output windows-terminal.json
+python3 terminal-theme.py --target powershell --output Microsoft.PowerShell_profile.ps1
+```
+
+The legacy entry point still works for iTerm2:
+
+```bash
+python3 make-profile.py --set-default
+```
+
+## Install Windows Terminal
+
+Requirements: Windows Terminal, PowerShell 5.1 or later. Run from a PowerShell
+prompt in this repo:
+
+```powershell
+pwsh -ExecutionPolicy Bypass -File .\make-profile.ps1
+```
+
+Optional full setup:
+
+```powershell
+pwsh -ExecutionPolicy Bypass -File .\make-profile.ps1 -InstallOhMyPosh -InstallFont
+```
+
+The installer patches the live Windows Terminal `settings.json`, creates a
+timestamped backup, adds the Oh My Pi Titanium scheme, sets JetBrainsMono NFM
+as the default font, configures copy/paste keybindings, and adds an idempotent
+oh-my-posh block to `$PROFILE`.
+
+Preview the planned changes without writing:
+
+```powershell
+pwsh -ExecutionPolicy Bypass -File .\make-profile.ps1 -WhatIf
+```
 
 ## Customize
 
 ```bash
-python3 make-profile.py --help
+python3 terminal-theme.py --help
 ```
 
 Common tweaks:
 
 ```bash
-# Bigger font
-python3 make-profile.py --font "JetBrainsMonoNFM-Medium 17"
-
-# Image more visible
-python3 make-profile.py --backdrop img.jpg --blend 0.65
-
-# Image barely visible (max readability)
-python3 make-profile.py --backdrop img.jpg --blend 0.95
-
-# Different profile name
-python3 make-profile.py --name "WezTerm Mocha Dim"
+python3 terminal-theme.py --font "JetBrainsMonoNFM-Medium 17"
+python3 terminal-theme.py --wezterm-font-size 17
+python3 terminal-theme.py --backdrop ~/Pictures/dark-bg.jpg --blend 0.65
+python3 terminal-theme.py --name "Terminal Theme Titanium"
 ```
 
-Re-run with different flags any time — the JSON is regenerated and iTerm2
-picks it up immediately.
-
-## How it works
-
-iTerm2 reads every `*.json` in
-`~/Library/Application Support/iTerm2/DynamicProfiles/` on launch and on
-change. The script writes one JSON describing a single profile with a fresh
-GUID. `--set-default` writes that GUID to
-`com.googlecode.iterm2 Default Bookmark Guid` via `defaults write`.
-
-Your existing iTerm2 profiles, preferences, and plist are untouched.
-
-## Uninstall
+## iTerm2 Uninstall
 
 ```bash
-rm ~/Library/Application\ Support/iTerm2/DynamicProfiles/wezterm-port.json
+rm ~/Library/Application\ Support/iTerm2/DynamicProfiles/terminal-theme.json
 ```
 
-If it was set as default, pick a different default in
-Preferences → Profiles → Other Actions → Set as Default.
+If it was set as default, pick a different default in Preferences > Profiles >
+Other Actions > Set as Default.
+
+## Windows Uninstall
+
+```powershell
+pwsh -ExecutionPolicy Bypass -File .\uninstall.ps1
+```
+
+To restore the most recent Windows Terminal backup instead of editing keys in
+place:
+
+```powershell
+pwsh -ExecutionPolicy Bypass -File .\uninstall.ps1 -RestoreLatestBackup
+```
+
+## Landing Page
+
+Open `docs/index.html` locally or publish the `docs/` directory with GitHub
+Pages.
 
 ## License
 
