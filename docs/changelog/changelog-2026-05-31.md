@@ -10,3 +10,7 @@
 - Decision: add a static landing page under `docs/index.html`.
 - Reason: the repo needs a first-class product surface without adding a build
   system.
+- Decision: archive `cskwork/windows-terminal-wezterm-port` after pushing a
+  deprecation pointer instead of permanently deleting it.
+- Reason: permanent GitHub repo deletion was rejected by the safety reviewer as
+  too costly to reverse without exact post-warning approval.
