@@ -60,6 +60,17 @@ class TerminalThemeTest(unittest.TestCase):
         self.assertIn('background = "#151820"', config)
         self.assertIn('font_size = 15.0', config)
 
+    def test_orca_fragment_uses_terminal_color_overrides(self):
+        fragment = self.module.build_orca_settings_fragment()
+        overrides = fragment["settings"]["terminalColorOverrides"]
+
+        self.assertEqual("#151820", overrides["background"])
+        self.assertEqual("#e8ecf4", overrides["foreground"])
+        self.assertEqual("#00b4ff", overrides["cursor"])
+        self.assertEqual("#0082b3", overrides["selectionBackground"])
+        self.assertEqual("#0f1216", overrides["cursorAccent"])
+        self.assertEqual("#e8ecf4", overrides["brightWhite"])
+
     def test_all_target_writes_every_terminal_artifact(self):
         with tempfile.TemporaryDirectory() as tmp:
             args = self.module.parse_args(["--target", "all", "--output-dir", tmp])
@@ -72,11 +83,14 @@ class TerminalThemeTest(unittest.TestCase):
                     "wezterm.lua",
                     "windows-terminal.json",
                     "Microsoft.PowerShell_profile.ps1",
+                    "orca-settings.json",
                 },
                 names,
             )
             windows = json.loads((Path(tmp) / "windows-terminal.json").read_text())
             self.assertEqual("Oh My Pi Titanium", windows["schemes"][0]["name"])
+            orca = json.loads((Path(tmp) / "orca-settings.json").read_text())
+            self.assertEqual("#151820", orca["settings"]["terminalColorOverrides"]["background"])
 
     def test_windows_live_installer_uses_titanium_palette(self):
         installer = Path(__file__).with_name("make-profile.ps1").read_text()

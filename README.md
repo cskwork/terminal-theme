@@ -1,7 +1,7 @@
 # terminal-theme
 
 Generate one Oh My Pi Titanium terminal theme for iTerm2, WezTerm, Windows
-Terminal, and PowerShell-adjacent shell styling.
+Terminal, Orca, and PowerShell-adjacent shell styling.
 
 The project keeps the iTerm2 Dynamic Profile installer, then adds portable
 theme fragments for terminal apps that use different config formats.
@@ -13,11 +13,12 @@ theme fragments for terminal apps that use different config formats.
 | iTerm2 | Dynamic Profile JSON |
 | WezTerm | `wezterm.lua` color scheme |
 | Windows Terminal | settings fragment with a `schemes` entry |
+| Orca | settings fragment with `terminalColorOverrides` |
 | PowerShell | profile snippet for `$PSStyle` and `$Host.PrivateData` |
 
-PowerShell does not own the terminal ANSI palette. Use the iTerm2, WezTerm, or
-Windows Terminal target for full foreground, background, cursor, selection, and
-16-color ANSI palette support.
+PowerShell does not own the terminal ANSI palette. Use the iTerm2, WezTerm,
+Windows Terminal, or Orca target for full foreground, background, cursor,
+selection, and 16-color ANSI palette support.
 
 ## Install iTerm2
 
@@ -46,6 +47,7 @@ This writes:
 dist/iterm2-dynamic-profile.json
 dist/wezterm.lua
 dist/windows-terminal.json
+dist/orca-settings.json
 dist/Microsoft.PowerShell_profile.ps1
 ```
 
@@ -54,8 +56,13 @@ dist/Microsoft.PowerShell_profile.ps1
 ```bash
 python3 terminal-theme.py --target wezterm --output wezterm.lua
 python3 terminal-theme.py --target windows-terminal --output windows-terminal.json
+python3 terminal-theme.py --target orca --output orca-settings.json
 python3 terminal-theme.py --target powershell --output Microsoft.PowerShell_profile.ps1
 ```
+
+The Orca target writes the same `settings.terminalColorOverrides` shape used in
+Orca's settings store, so it can be merged into an Orca settings backup or used
+as the source for the terminal color controls.
 
 The legacy entry point still works for iTerm2:
 

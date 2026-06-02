@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>terminal-theme | Oh My Pi Titanium</title>
-  <meta name="description" content="One Oh My Pi Titanium terminal theme for iTerm2, WezTerm, Windows Terminal, and PowerShell.">
+  <meta name="description" content="One Oh My Pi Titanium terminal theme for iTerm2, WezTerm, Windows Terminal, Orca, and PowerShell.">
   <style>
     :root {
       --base: #151820;
@@ -323,6 +323,10 @@
       grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 
+    .grid.five {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
     .card {
       border: 1px solid var(--line);
       border-radius: 8px;
@@ -521,6 +525,7 @@
 
       .grid.three,
       .grid.four,
+      .grid.five,
       .palette {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
@@ -578,6 +583,7 @@
 
       .grid.three,
       .grid.four,
+      .grid.five,
       .palette {
         grid-template-columns: 1fr;
       }
@@ -641,6 +647,7 @@
 <span class="green">Wrote</span> dist/iterm2-dynamic-profile.json
 <span class="green">Wrote</span> dist/wezterm.lua
 <span class="green">Wrote</span> dist/windows-terminal.json
+<span class="green">Wrote</span> dist/orca-settings.json
 <span class="green">Wrote</span> dist/Microsoft.PowerShell_profile.ps1
 
 <span class="gold">foreground</span> #e8ecf4
@@ -663,7 +670,7 @@
 
         <div class="container">
           <div class="hero-copy">
-            <p class="eyebrow">iTerm2 / WezTerm / Windows Terminal / PowerShell</p>
+            <p class="eyebrow">iTerm2 / WezTerm / Windows Terminal / Orca / PowerShell</p>
             <h1>Oh My Pi Titanium</h1>
             <p class="lead">A consolidated terminal theme repo with one Titanium palette, portable config outputs, and a live Windows Terminal installer.</p>
             <div class="hero-actions">
@@ -708,7 +715,7 @@
                 <button class="copy-button" type="button" data-copy="python3 terminal-theme.py --target all --output-dir dist">Copy</button>
               </div>
               <pre class="code">python3 terminal-theme.py --target all --output-dir dist</pre>
-              <div class="card-foot">Builds iTerm2, WezTerm, Windows Terminal, and PowerShell files together.</div>
+              <div class="card-foot">Builds iTerm2, WezTerm, Windows Terminal, Orca, and PowerShell files together.</div>
             </article>
           </div>
         </div>
@@ -723,7 +730,7 @@
             </div>
           </div>
 
-          <div class="grid four">
+          <div class="grid five">
             <article class="card output-card">
               <span class="output-kicker">JSON</span>
               <h3>iTerm2 Dynamic Profile</h3>
@@ -738,6 +745,11 @@
               <span class="output-kicker">JSON</span>
               <h3>Windows Terminal</h3>
               <p>A settings fragment for portable config and a PowerShell installer for live settings mutation.</p>
+            </article>
+            <article class="card output-card">
+              <span class="output-kicker">JSON</span>
+              <h3>Orca</h3>
+              <p>A settings fragment that maps Titanium colors to Orca terminal color overrides.</p>
             </article>
             <article class="card output-card">
               <span class="output-kicker">PS1</span>
@@ -782,6 +794,7 @@
               <button class="tab" type="button" role="tab" aria-selected="true" data-tab="iterm2">iTerm2</button>
               <button class="tab" type="button" role="tab" aria-selected="false" data-tab="wezterm">WezTerm</button>
               <button class="tab" type="button" role="tab" aria-selected="false" data-tab="windows">Windows Terminal</button>
+              <button class="tab" type="button" role="tab" aria-selected="false" data-tab="orca">Orca</button>
               <button class="tab" type="button" role="tab" aria-selected="false" data-tab="powershell">PowerShell</button>
             </div>
             <pre class="preview-code" id="preview-code" tabindex="0"></pre>
@@ -818,6 +831,16 @@
     "background": "#151820",
     "cursorColor": "#00b4ff"
   }]
+}`,
+      orca: `{
+  "settings": {
+    "terminalColorOverrides": {
+      "foreground": "#e8ecf4",
+      "background": "#151820",
+      "cursor": "#00b4ff",
+      "selectionBackground": "#0082b3"
+    }
+  }
 }`,
       powershell: `$PSStyle.Formatting.Error = "$esc[38;2;255;71;87m"
 $PSStyle.Formatting.Warning = "$esc[38;2;255;179;71m"
